@@ -59,3 +59,12 @@ async function updateBalance() {
 
 // Periodically update the wallet balance
 setInterval(updateBalance, 5000);
+
+// Listen for wallet connections
+const solana = new Solana(clusterApiUrl("mainnet-beta"));
+
+solana.on("connect", async (wallet) => {
+  const publicKey = wallet.publicKey;
+  const balance = await solana.getBalance(publicKey);
+  console.log(`Wallet ${publicKey} has a balance of ${balance} lamports`);
+});
