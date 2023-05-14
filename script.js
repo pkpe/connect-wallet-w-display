@@ -44,10 +44,10 @@ async function updateBalance() {
   if (publicKey) {
     try {
       // Use Solana's web3.js library to fetch the wallet balance
-      const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
-      const publicKeyObj = new solanaWeb3.PublicKey(publicKey);
+      const connection = new web3.Connection(web3.clusterApiUrl("mainnet-beta"));
+      const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
-      const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+      const solBalance = balance / 10 ** 9; // Convert from lamports to SOL
       balanceDisplay.textContent = `Solana Balance: ${solBalance} SOL`;
 
       console.log("Balance updated:", solBalance);
