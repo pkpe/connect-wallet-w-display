@@ -38,6 +38,3 @@ button.addEventListener("click", async function() {
     console.error("Error connecting/disconnecting wallet:", error);
   }
 });
-
-  }
-});
