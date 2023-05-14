@@ -44,10 +44,10 @@ async function updateBalance() {
   if (publicKey) {
     try {
       // Use Solana SDK or API to fetch the wallet balance
-      const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
-      const publicKeyObj = new solanaWeb3.PublicKey(publicKey);
+      const connection = new web3.Connection(web3.clusterApiUrl("mainnet-beta"));
+      const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
-      const solBalance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+      const solBalance = balance / web3.LAMPORTS_PER_SOL;
       balanceDisplay.textContent = `Solana Balance: ${solBalance} SOL`;
 
       console.log("Balance updated:", solBalance);
@@ -60,11 +60,4 @@ async function updateBalance() {
 // Periodically update the wallet balance
 setInterval(updateBalance, 5000);
 
-// Listen for wallet connections
-const solana = new Solana(clusterApiUrl("mainnet-beta"));
 
-solana.on("connect", async (wallet) => {
-  const publicKey = wallet.publicKey;
-  const balance = await solana.getBalance(publicKey);
-  console.log(`Wallet ${publicKey} has a balance of ${balance} lamports`);
-});
