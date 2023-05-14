@@ -43,7 +43,7 @@ button.addEventListener("click", async function() {
 async function updateBalance() {
   if (publicKey) {
     try {
-      // Use Solana SDK or API to fetch the wallet balance
+      // Use Solana's web3.js library to fetch the wallet balance
       const connection = new web3.Connection(web3.clusterApiUrl("mainnet-beta"));
       const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
