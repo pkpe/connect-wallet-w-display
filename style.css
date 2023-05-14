@@ -1,0 +1,40 @@
+/* style.css */
+body {
+  background-image: url("https://github.com/pkpe/Degenerate-Monkiez/blob/main/furnace.gif?raw=true");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+h1 {
+  font-family: Arial, sans-serif;
+  font-size: 36px;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
