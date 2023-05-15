@@ -6,7 +6,7 @@ const connectButton = document.getElementById("myButton");
 // Connect wallet function
 async function connectWallet() {
   try {
-    const wallet = new solanaWeb3.WalletAdapter(window.solana);
+    const wallet = new web3.WalletAdapter(window.solana);
     await wallet.connect();
     publicKey = wallet.publicKey.toString();
     console.log("Connected to wallet:", publicKey);
@@ -29,8 +29,8 @@ function disconnectWallet() {
 async function updateBalance() {
   if (publicKey) {
     try {
-      const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
-      const publicKeyObj = new solanaWeb3.PublicKey(publicKey);
+      const connection = new web3.Connection(web3.clusterApiUrl("mainnet-beta"));
+      const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
       const solBalance = balance / 10 ** 9; // Convert from lamports to SOL
 
@@ -45,12 +45,12 @@ async function updateBalance() {
 // Initialize Solana wallet adapter
 window.onload = function () {
   if ("solana" in window) {
-    const wallet = new solanaWeb3.WalletAdapter(window.solana);
-    solanaWeb3.on("connect", () => {
+    const wallet = new web3.WalletAdapter(window.solana);
+    web3.on("connect", () => {
       console.log("Connected to wallet provider");
       connectWallet();
     });
-    solanaWeb3.on("disconnect", () => {
+    web3.on("disconnect", () => {
       console.log("Disconnected from wallet provider");
       disconnectWallet();
     });
@@ -72,10 +72,11 @@ window.onload = function () {
 // Handle connect/disconnect button clicks
 connectButton.addEventListener("click", () => {
   if (publicKey) {
-    solanaWeb3.disconnect();
+    web3.disconnect();
   } else {
     connectWallet();
   }
 });
+
 
 
