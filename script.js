@@ -28,10 +28,7 @@ function disconnectWallet() {
 async function updateBalance() {
   if (publicKey) {
     try {
-      const apiKey = "YOUR_ALCHEMY_API_KEY";
-      const endpoint = `https://solana-mainnet.g.alchemy.com/v2/${apiKey}`;
-      const connection = new web3.Connection(endpoint);
-
+      const connection = new web3.Connection(web3.clusterApiUrl("mainnet-beta"));
       const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
       const solBalance = balance / 10 ** 9; // Convert from lamports to SOL
@@ -45,7 +42,7 @@ async function updateBalance() {
 }
 
 // Initialize Solana wallet adapter
-const solana = new Solana(clusterApiUrl("mainnet-beta"));
+const solana = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"));
 
 // Listen for wallet connections
 solana.on("connect", async (wallet) => {
@@ -68,3 +65,4 @@ connectButton.addEventListener("click", () => {
     connectWallet();
   }
 });
+
