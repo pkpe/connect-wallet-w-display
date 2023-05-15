@@ -1,55 +1,42 @@
-// script.js
-const button = document.getElementById("myButton");
-const balanceDisplay = document.getElementById("balanceDisplay");
-
-let walletConnected = false;
+// Define global variables
 let publicKey = null;
+const balanceDisplay = document.getElementById("balanceDisplay");
+const connectButton = document.getElementById("myButton");
 
-button.addEventListener("click", async function() {
+// Connect wallet function
+async function connectWallet() {
   try {
-    // Check if the Phantom wallet is installed
-    if (!window.solana || !window.solana.isPhantom) {
-      throw new Error("Phantom wallet extension is not installed.");
-    }
-
-    if (!walletConnected) {
-      // Request connection to the Phantom wallet
-      await window.solana.connect();
-
-      // Wallet is connected
-      walletConnected = true;
-      button.textContent = "Disconnect";
-
-      // Get the public key of the connected wallet
-      publicKey = window.solana.publicKey.toString();
-
-      console.log("Wallet connected:", publicKey);
-    } else {
-      // Disconnect the wallet
-      await window.solana.disconnect();
-      walletConnected = false;
-      button.textContent = "Connect Wallet";
-      balanceDisplay.textContent = "";
-      publicKey = null;
-
-      console.log("Wallet disconnected");
-    }
-
+    const wallet = await solana.connect();
+    publicKey = wallet.publicKey.toString();
+    console.log("Connected to wallet:", publicKey);
+    connectButton.textContent = "Disconnect Wallet";
+    updateBalance();
   } catch (error) {
-    console.error("Error connecting/disconnecting wallet:", error);
+    console.error("Error connecting wallet:", error);
   }
-});
+}
 
+// Disconnect wallet function
+function disconnectWallet() {
+  publicKey = null;
+  console.log("Disconnected from wallet");
+  connectButton.textContent = "Connect Wallet";
+  balanceDisplay.textContent = "";
+}
+
+// Update balance function
 async function updateBalance() {
   if (publicKey) {
     try {
-      // Use Solana's web3.js library to fetch the wallet balance
-      const connection = new web3.Connection("https://api.mainnet-beta.solana.com");
+      const apiKey = "YOUR_ALCHEMY_API_KEY";
+      const endpoint = `https://solana-mainnet.g.alchemy.com/v2/${apiKey}`;
+      const connection = new web3.Connection(endpoint);
+
       const publicKeyObj = new web3.PublicKey(publicKey);
       const balance = await connection.getBalance(publicKeyObj);
       const solBalance = balance / 10 ** 9; // Convert from lamports to SOL
-      balanceDisplay.textContent = `Solana Balance: ${solBalance} SOL`;
 
+      balanceDisplay.textContent = `Solana Balance: ${solBalance} SOL`;
       console.log("Balance updated:", solBalance);
     } catch (error) {
       console.error("Error fetching wallet balance:", error);
@@ -57,5 +44,27 @@ async function updateBalance() {
   }
 }
 
-// Periodically update the wallet balance
-setInterval(updateBalance, 5000);
+// Initialize Solana wallet adapter
+const solana = new Solana(clusterApiUrl("mainnet-beta"));
+
+// Listen for wallet connections
+solana.on("connect", async (wallet) => {
+  publicKey = wallet.publicKey.toString();
+  console.log("Connected to wallet:", publicKey);
+  connectButton.textContent = "Disconnect Wallet";
+  updateBalance();
+});
+
+// Listen for wallet disconnections
+solana.on("disconnect", () => {
+  disconnectWallet();
+});
+
+// Handle connect/disconnect button clicks
+connectButton.addEventListener("click", () => {
+  if (publicKey) {
+    solana.disconnect();
+  } else {
+    connectWallet();
+  }
+});
